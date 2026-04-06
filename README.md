@@ -1,25 +1,95 @@
-# Inner Circle AI
+# 🤝 Inner Circle AI
 
 **Five AI agents. One team. You're the CEO.**
 
-A file-based framework for running a team of 5 specialized AI agents that operate as your startup's leadership team. No APIs between agents, no message queues, no orchestration servers. Just markdown files. Each agent reads what it needs, writes what it owns, and routes everything through your Chief of Staff.
-
-You make every decision. Agents propose. You approve. Nothing ships, publishes, merges, or goes live without your explicit sign-off.
-
-Built as a self-managing open-source project (this repo manages itself), but the pattern works for any business. Fork it, rename the agents, swap in your industry context, and you have your own autonomous team.
+[![MIT License](https://img.shields.io/badge/license-MIT-00d4aa.svg)](LICENSE)
+[![Markdown](https://img.shields.io/badge/stack-pure%20markdown-blue.svg)](#built-on)
+[![Agents](https://img.shields.io/badge/agents-5-7c3aed.svg)](#the-team)
+[![Works With](https://img.shields.io/badge/works%20with-Claude%20Code%20%7C%20Cursor%20%7C%20Windsurf%20%7C%20Aider-d97706.svg)](#compatible-ai-tools)
 
 ---
 
-## Why File-Based?
+## Table of Contents
 
-Modern AI tools — Claude Code, Cursor, Windsurf, Cline, Aider, and others — all understand files natively. They read markdown, follow instructions in context, and write output to disk. This framework leans into that.
+1. [The Problem](#the-problem)
+2. [What It Does](#what-it-does)
+3. [Demo](#demo)
+4. [The Team](#the-team)
+5. [Built On](#built-on)
+6. [Quickstart](#quickstart)
+7. [Architecture](#architecture)
+8. [The Governance Model](#the-governance-model)
+9. [Use Cases](#use-cases)
+10. [Compatible AI Tools](#compatible-ai-tools)
+11. [Why This Is Different](#why-this-is-different)
 
-- **No vendor lock-in.** SOUL.md files work in any tool that reads project files.
-- **No infrastructure.** No databases, no queues, no orchestration servers. Git is your state management.
-- **Portable agents.** Move a SOUL.md between tools and the agent behaves the same way.
-- **Human-readable everything.** Every instruction, every output, every coordination artifact is a markdown file you can read and edit.
+---
 
-Pick whichever AI tool fits your workflow. Open a session, point it at an agent's SOUL.md, and go.
+## The Problem
+
+AI coding tools are powerful individually, but there's no coordination layer. You can ask Claude to research something, then ask it to write release notes, then ask it to triage issues — but each session starts from scratch. No memory, no delegation, no approval flow.
+
+Solo founders and small teams end up doing the same work they'd delegate to a team of humans: reading issues, writing docs, drafting announcements, tracking metrics. They use AI for one-off tasks but never get the compounding benefits of a team that remembers, specializes, and routes decisions through a single point of contact.
+
+You need a team, not a chatbot.
+
+---
+
+## What It Does
+
+Inner Circle AI is a file-based framework for running 5 specialized AI agents as your leadership team. Each agent has a defined role, personality, memory, and output format. They coordinate through shared files — no APIs, no message queues, no orchestration servers.
+
+```text
+Input:  Your AI tool  +  An agent's SOUL.md  +  A project brief
+Output: Structured deliverables in your outbox, ready for your approval
+```
+
+### Core Dimensions
+
+| Dimension | How It Works |
+| --------- | ------------ |
+| **Specialization** | 5 agents with distinct roles: research, engineering, growth, operations, coordination |
+| **Memory** | File-based memory that persists across sessions — agents get better over time |
+| **Governance** | CEO approval queue — nothing ships without your sign-off |
+| **Coordination** | Hub-and-spoke model through Ada (Chief of Staff) — you check one briefing, not five |
+| **Portability** | Pure markdown — works in any AI tool that reads files |
+
+---
+
+## Demo
+
+A typical CEO briefing from Ada after a day of agent work:
+
+```text
+# CEO Briefing — 2026-04-06
+
+## Decisions Needed (3 items)
+
+### 1. [URGENT] Release Notes v0.2.0 — from Ogilvy
+Bottom line: Draft ready for the SOUL.md restructuring release.
+Ada's recommendation: Approve — clear, user-focused, matches our voice.
+File: outbox/ogilvy/release-notes-v0.2.0.md
+
+### 2. Issue Triage Report — from Tesla
+Bottom line: 4 new issues, 2 bugs (P1), 1 feature request (P2), 1 question.
+Ada's recommendation: Approve triage. Assign bugs to Tesla for next session.
+File: outbox/tesla/triage-2026-04-06.md
+
+### 3. Competitor Brief — from Curie
+Bottom line: CrewAI shipped v0.5 with memory support. Relevant to our positioning.
+Ada's recommendation: Approve brief. Flag for Ogilvy to draft a comparison post.
+File: outbox/curie/competitor-update-2026-04-06.md
+
+## Status Update
+- Curie: Delivered daily intel brief. Tracking 6 competitor frameworks.
+- Tesla: Reviewed 2 PRs, triaged 4 issues.
+- Ogilvy: Drafted release notes for v0.2.0.
+- Nightingale: Updated GETTING-STARTED.md with new session workflow.
+```
+
+Your response: *"Approve 1 and 2. On 3 — have Ogilvy draft the comparison post this week."*
+
+That's it. Under 2 minutes.
 
 ---
 
@@ -33,216 +103,191 @@ Pick whichever AI tool fits your workflow. Open a session, point it at an agent'
 | **Ogilvy** | David Ogilvy | Head of Growth | Release notes, community updates, social content, announcements |
 | **Nightingale** | Florence Nightingale | Head of Operations | Documentation, metrics, contributor experience, process improvement |
 
-### How They Work Together
+---
 
-```
-Curie (Research) ───→ writes intel ───→ Everyone reads
-Tesla (Engineering) ─→ writes specs ──→ Nightingale updates docs, Ogilvy writes release notes
-Ogilvy (Growth) ────→ writes drafts ──→ Ada reviews, routes to CEO
-Nightingale (Ops) ──→ writes docs ───→ Ada includes in CEO briefing
+## Built On
 
-All agents ─────────→ write to outbox → Ada consolidates → CEO decides
-```
+| Component | Why |
+|-----------|-----|
+| **Markdown files** | Every AI tool reads them natively — zero vendor lock-in |
+| **Git** | State management, version control, and collaboration built in |
+| **SOUL.md** | One file per agent defines identity, principles, workflow, and stop condition |
+| **File-based coordination** | Agents read and write to shared directories — no APIs, no queues, no servers |
 
-Ada is your single point of contact. You talk to Ada. Ada talks to the team. The agents never bypass her unless something is genuinely stuck (see Escalations below).
+No programming language. No dependencies. No build step.
 
 ---
 
-## The Governance Model — You're the CEO
+## Quickstart
 
-This is not a "set it and forget it" system. You have explicit authority over every output.
-
-### The Approval Queue
-
-```
-Agent produces output
-        ↓
-Writes to: projects/{slug}/outbox/{agent}/filename.md
-        ↓
-Ada reads ALL outboxes, consolidates
-        ↓
-Ada writes: outbox/ada/ceo-briefing-YYYY-MM-DD.md
-  → Everything pending, prioritized, with her recommendations
-        ↓
-You read Ada's briefing (the ONLY thing you need to check)
-You respond: "approve 1 and 3, feedback on 2"
-        ↓
-Ada routes your decisions back to each agent
-        ↓
-Agents pick up approvals/feedback next session
+```bash
+git clone https://github.com/amitgambhir/inner-circle-ai.git
+cd inner-circle-ai
 ```
 
-### Standing Permissions
+Fill in your preferences in `CEO.md`, then start your first agent session:
 
-As you build trust, you can grant agents permission to act without approval on specific tasks. Define these in `CEO.md`. Example: "Nightingale may fix README typos without approval." Everything else goes through the queue.
+```bash
+# In Claude Code, Cursor, Windsurf, or any AI tool:
+# Point it at Curie's SOUL.md and the project context
 
-### Escalations — The Fire Alarm
-
-If an agent finds their outbox items have been waiting 48+ hours with no response (24 hours for urgent items), they write an escalation to `projects/{slug}/escalations/`. You check this directory directly — it should almost always be empty. Ada also monitors staleness and flags items before they hit the threshold.
-
----
-
-## Directory Structure
-
+"Read agents/curie/SOUL.md, AGENTS.md, CEO.md, and PROJECTS.md.
+You are Curie, Head of Research. Your active project is inner-circle-mgmt.
+Start by reading projects/inner-circle-mgmt/PROJECT.md,
+then run your session workflow as defined in your SOUL.md."
 ```
-inner-circle-ai/
-├── README.md                         ← You are here
-├── AGENTS.md                         ← Shared operating rules for all agents
-├── CEO.md                            ← Your preferences, standing permissions, voice profile
-├── PROJECTS.md                       ← Project registry & priority dashboard
-├── HEARTBEAT.md                      ← Self-healing cron monitor
-│
-├── agents/                           ← Agent identities (global, not project-specific)
-│   ├── ada/
-│   │   ├── SOUL.md                   ← Ada's identity and instructions
-│   │   ├── MEMORY.md                 ← Ada's curated long-term memory
-│   │   └── memory/                   ← Ada's daily session logs
-│   ├── curie/
-│   │   ├── SOUL.md
-│   │   ├── MEMORY.md
-│   │   └── memory/
-│   ├── tesla/
-│   │   ├── SOUL.md
-│   │   ├── MEMORY.md
-│   │   └── memory/
-│   ├── ogilvy/
-│   │   ├── SOUL.md
-│   │   ├── MEMORY.md
-│   │   └── memory/
-│   └── nightingale/
-│       ├── SOUL.md
-│       ├── MEMORY.md
-│       └── memory/
-│
-├── projects/
-│   ├── _template/                    ← Copy this to start any new project
-│   │   ├── PROJECT.md
-│   │   ├── intel/
-│   │   ├── outbox/
-│   │   ├── approved/
-│   │   ├── feedback/
-│   │   ├── escalations/
-│   │   ├── content/
-│   │   └── CHANGELOG.md
-│   │
-│   └── inner-circle-mgmt/           ← Starter: this repo managing itself
-│       ├── PROJECT.md
-│       ├── intel/
-│       │   ├── research/
-│       │   ├── architecture/
-│       │   └── ops/
-│       ├── outbox/
-│       │   ├── ada/
-│       │   ├── curie/
-│       │   ├── tesla/
-│       │   ├── ogilvy/
-│       │   └── nightingale/
-│       ├── approved/
-│       ├── feedback/
-│       ├── escalations/
-│       ├── content/
-│       │   ├── releases/
-│       │   ├── social/
-│       │   ├── docs/
-│       │   └── community/
-│       └── CHANGELOG.md
-│
-└── docs/
-    ├── GETTING-STARTED.md
-    ├── USE-CASES.md                  ← 4 use case templates
-    ├── GOVERNANCE.md                 ← Deep dive on the approval queue
-    └── CUSTOMIZATION.md              ← How to fork and make it yours
+
+Check Curie's output:
+
+```bash
+ls projects/inner-circle-mgmt/intel/research/    # her research brief
+ls projects/inner-circle-mgmt/outbox/curie/       # anything needing your approval
+ls agents/curie/memory/                            # her session log
 ```
 
 ---
 
-## The Starter Use Case: This Repo Manages Itself
+## Architecture
 
-The default project (`projects/inner-circle-mgmt/`) is the agents managing the inner-circle-ai repo. This is intentionally self-referential:
+```text
+                         ┌─────────────────────────────────────────┐
+                         │           CEO (You)                     │
+                         │   Reads Ada's briefing, makes decisions │
+                         └──────────────┬──────────────────────────┘
+                                        │
+                                        ▼
+                         ┌──────────────────────────────┐
+                         │     Ada (Chief of Staff)      │
+                         │  Consolidates → Briefs CEO    │
+                         │  Routes decisions → Agents    │
+                         └──┬───────┬───────┬───────┬───┘
+                            │       │       │       │
+                   ┌────────┘   ┌───┘   ┌───┘   ┌───┘
+                   ▼            ▼       ▼       ▼
+              ┌─────────┐ ┌────────┐ ┌───────┐ ┌─────────────┐
+              │  Curie   │ │ Tesla  │ │Ogilvy │ │ Nightingale │
+              │ Research │ │ Engin. │ │Growth │ │ Operations  │
+              └────┬─────┘ └───┬────┘ └───┬───┘ └──────┬──────┘
+                   │           │          │             │
+                   ▼           ▼          ▼             ▼
+              intel/       intel/     outbox/       outbox/
+              research/    architecture/ ogilvy/    nightingale/
 
-- **Curie** monitors GitHub issues, PRs, community discussions, stars/forks trends, and competitor agent frameworks
-- **Tesla** triages issues, reviews PRs, writes architecture decision records
-- **Ogilvy** writes release notes, community updates, social announcements
-- **Nightingale** maintains the docs you're reading right now, tracks repo health metrics
-- **Ada** coordinates everything and delivers your daily briefing
-
-This means you can see the framework in action the moment you fork it.
+File flow:
+  Curie writes intel    → Everyone reads
+  Tesla writes specs    → Nightingale + Ogilvy read
+  All agents            → write to outbox/ → Ada consolidates → CEO decides
+```
 
 ---
 
-## Other Use Cases
+## The Governance Model
 
-The framework is use-case-agnostic. These are included as templates in `docs/USE-CASES.md`:
+Nothing ships without your approval. The flow is simple:
 
-**Content Engine for a SaaS Blog** — Curie researches trending topics, Ogilvy drafts posts and social content, Nightingale tracks what's performing, Ada coordinates the editorial calendar. Great for solo founders who need consistent content output.
+1. **Agent produces output** → writes to `outbox/{agent}/`
+2. **Ada consolidates** → writes a single CEO briefing with recommendations
+3. **You review** → approve, give feedback, or reject each item
+4. **Ada routes decisions** → agents pick up approvals/feedback next session
 
-**Launch Week Playbook** — All five agents at full throttle for a bounded sprint. Tesla writes the changelog, Ogilvy writes the announcements, Curie researches positioning, Nightingale prepares support docs, Ada runs the launch checklist with hard deadlines.
+**Standing permissions** let trusted agents skip the queue for low-risk tasks (e.g., fixing typos in approved docs). Define these in `CEO.md`. Start tight, loosen over time.
 
-**Weekly Competitor Intelligence Briefing** — Curie monitors competitor activity on a weekly cadence. Ogilvy suggests response content. Tesla flags technical implications. Ada delivers a consolidated Monday briefing.
+**Escalations** fire if items sit unanswered for 48+ hours (24 for urgent). This should almost never happen — Ada flags staleness before it hits the threshold.
 
-**Customer Feedback → Product Pipeline** — Nightingale aggregates feedback from support channels, Curie analyzes patterns, Tesla writes specs for top requests, Ada presents a prioritized roadmap.
+See [docs/GOVERNANCE.md](docs/GOVERNANCE.md) for the full model.
+
+---
+
+## Use Cases
+
+The framework ships with **open source repo management** as the starter (this repo manages itself). Four additional templates are included in [docs/USE-CASES.md](docs/USE-CASES.md):
+
+| Use Case | Primary Agents | Cadence |
+|----------|---------------|---------|
+| **Content engine for a SaaS blog** | Curie + Ogilvy | Daily |
+| **Launch week playbook** | All five, full throttle | Sprint (bounded) |
+| **Weekly competitor intelligence** | Curie + Ada | Weekly |
+| **Customer feedback → product pipeline** | Nightingale + Curie + Tesla | Weekly |
+
+To start your own: copy `projects/_template/`, fill in `PROJECT.md`, set priority in `PROJECTS.md`.
+
+---
+
+## Telegram Bot — Ada as a Chat Interface
+
+The framework includes a Telegram bot that IS Ada. One conversation, one contact. You trigger agent runs, receive briefings, and make decisions — all from your phone.
+
+```text
+You:  "run the team"
+Ada:  "Running agents for inner-circle-mgmt..."
+Ada:  "✓ Curie complete"
+Ada:  "✓ Tesla complete"
+Ada:  "✓ Ogilvy complete"
+Ada:  "✓ Nightingale complete"
+Ada:  "✓ Ada complete — briefing ready"
+Ada:  [Briefing with Approve/Reject/Feedback buttons per item]
+
+You:  [taps Approve on item 1]
+Ada:  "Item 1 approved. Routing to Ogilvy."
+
+You:  "what did Curie find on CrewAI?"
+Ada:  [reads Curie's intel, responds]
+```
+
+**How it works:**
+
+- CEO sends "run the team" (or "run curie", "run tesla ada", etc.)
+- Bot spawns `claude -p` sessions sequentially, one per agent, each with isolated context
+- Each agent gets only the tools it needs (per-agent permissions — see below)
+- After all agents finish, Ada's briefing arrives with inline buttons
+- CEO taps Approve/Reject/Feedback — bot writes the files immediately
+- Free-text messages go through Ada for follow-ups, priority changes, or ad-hoc requests
+
+**Per-agent tool permissions:**
+
+| Agent | File Access | Git | GitHub CLI | Web |
+| ----- | ----------- | --- | ---------- | --- |
+| Curie | Read/Write/Edit | Read | Issues, PRs, API | Search, Fetch |
+| Tesla | Read/Write/Edit | Read + Write | Issues, PRs, API | No |
+| Ogilvy | Read/Write/Edit | Read | No | Search, Fetch |
+| Nightingale | Read/Write/Edit | Read | No | Search, Fetch |
+| Ada | Read/Write/Edit | Read + Write | No | No |
+
+**Setup:**
+
+```bash
+pip install -r requirements.txt
+cp .env.example .env
+# Edit .env with your Telegram bot token and chat ID
+python3 -m bot.main
+```
+
+See [docs/superpowers/specs/2026-04-06-ada-telegram-bot-design.md](docs/superpowers/specs/2026-04-06-ada-telegram-bot-design.md) for the full design spec.
 
 ---
 
 ## Compatible AI Tools
 
-This framework works with any tool that reads files and follows markdown instructions:
-
-- **Claude Code** — load a SOUL.md as context
-- **Cursor** — use SOUL.md as project rules
-- **Windsurf** — rules files are natively supported
-- **Cline / Roo Code** — pass SOUL.md as system context
-- **Aider** — include SOUL.md in chat context
-- **OpenClaw** — for always-on scheduling with cron and Telegram
+| Tool | How to Load Agents |
+| ---- | ------------------ |
+| **Telegram Bot** | Built-in — send "run the team" and Ada handles everything |
+| **Claude Code** | Load SOUL.md as context at session start |
+| **Cursor** | Add SOUL.md as project rules |
+| **Windsurf** | Use rules files (natively supported) |
+| **Cline / Roo Code** | Pass SOUL.md as system context |
+| **Aider** | Include SOUL.md in chat context |
+| **OpenClaw** | Built-in cron scheduling + Telegram integration |
 
 If your tool can read a file and follow instructions, it can run these agents.
 
 ---
 
-## How to Get Started
+## Why This Is Different
 
-**Do not build all five agents on day one.**
-
-### Week 1: Curie (Research)
-Install your preferred AI tool. Point it at `agents/curie/SOUL.md`. Ask Curie to research your repo's open issues and community activity. Review her output in `outbox/curie/`. Practice giving feedback. Refine her SOUL.md.
-
-### Week 2: Add Ada (Chief of Staff)
-Ada reads Curie's intel and starts writing CEO briefings. You now have a daily review habit: read Ada's briefing, respond with decisions.
-
-### Week 3: Add Tesla (Engineering)
-Tesla triages issues, reviews PRs, writes specs. Three agents coordinating through files.
-
-### Week 4: Add Ogilvy + Nightingale
-Ogilvy writes release notes from Tesla's changelogs. Nightingale maintains docs. Full team operational.
-
-### Week 5+: Add Projects
-New initiative? Copy `projects/_template/`, fill in `PROJECT.md`, set priority in `PROJECTS.md`, assign agents. The system scales horizontally.
+- **No code, no infrastructure.** Pure markdown files in a git repo. The only code is the optional Telegram bot — and that's just a convenience wrapper around the file layer.
+- **You stay in control.** Every other multi-agent framework optimizes for autonomy. This one optimizes for CEO oversight with a 2-minute daily review.
+- **Tool-agnostic.** Switch from Claude Code to Cursor to Aider — the agents don't care. SOUL.md works everywhere.
 
 ---
 
-## Making It Yours
-
-1. **Fork this repo**
-2. **Rename agents** if you want — pick figures who embody each role for your domain
-3. **Fill in `CEO.md`** — your preferences, voice profile, and standing permissions
-4. **Swap the starter use case** — replace `inner-circle-mgmt/` with your own project
-5. **Start with one agent** — get comfortable, then add the rest
-
----
-
-## Key Files Explained
-
-| File | What It Does |
-|------|-------------|
-| `SOUL.md` | Defines an agent's identity, role, principles, and stop condition. The most important file per agent. |
-| `AGENTS.md` | Shared rules every agent follows. Session startup checklist, memory rules, communication standards. |
-| `CEO.md` | Your preferences, standing permissions, and voice profile. Agents read this to understand how you work. |
-| `PROJECTS.md` | The priority dashboard. What's active, what matters most. Agents check this at session start. |
-| `HEARTBEAT.md` | Self-healing monitor. Detects stale cron jobs and forces re-runs. |
-| `MEMORY.md` | Per-agent curated long-term memory. Lessons, preferences, patterns — distilled from daily logs. |
-
----
-
-## License
-
-MIT — use it however you want.
+*I built this because I wanted a team that works while I sleep — but only ships what I approve.*

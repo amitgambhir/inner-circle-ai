@@ -40,9 +40,31 @@ If you are invoked without a SOUL.md (general Claude Code session), you are help
 
 ## Telegram Bot
 
-- The bot lives in `bot/` — Python, using `python-telegram-bot`
+- The bot lives in `bot/` — Python 3.9+, using `python-telegram-bot` v21+
 - Run with `python3 -m bot.main`
-- Config via `.env` (see `.env.example`)
+- Config via `.env` (see `.env.example`) — bot token, CEO chat ID, default project
 - The bot IS Ada's Telegram interface — it reads/writes the same files the framework uses
-- Agent runs are triggered via `claude -p` subprocesses, one per agent
+- Agent runs are triggered via `claude -p` subprocesses, one per agent, each in its own isolated context
 - Tests in `tests/` — run with `python3 -m pytest tests/ -v`
+
+### Key design decisions
+
+- **Per-agent tool permissions:** Each agent gets only the tools it needs via `--allowedTools`. Curie gets web access for research. Tesla gets git write + `gh` CLI. Ada gets git write for routing. No agent gets unrestricted bash.
+- **Sequential execution:** Agents run in dependency order (Curie → Tesla → Ogilvy → Nightingale → Ada). No parallel execution — each agent reads the previous agent's file output from disk.
+- **Single-user auth:** Bot rejects messages from any Telegram chat ID that doesn't match `TELEGRAM_CEO_CHAT_ID` in `.env`.
+- **Inline buttons for approvals:** Each briefing item gets Approve/Reject/Feedback buttons. Feedback triggers a text prompt, then writes the CEO's exact words to the agent's outbox.
+- **Free-text goes through Ada:** Any message that isn't a run command or button callback spawns a Claude session with Ada's SOUL.md to interpret and respond.
+- **Escalation watcher:** Runs every 30 minutes, scans `escalations/` directories, sends alerts to Telegram.
+
+### Bot modules
+
+| Module | Responsibility |
+| --- | --- |
+| `bot/config.py` | Env loading, agent definitions with per-agent tools, path helpers |
+| `bot/runner.py` | Builds prompts, resolves dependency order, spawns `claude -p` |
+| `bot/briefing.py` | Parses Ada's briefing markdown into structured items |
+| `bot/router.py` | Writes `.approved.md` / `.feedback.md` files to agent outboxes |
+| `bot/ada.py` | Spawns Ada Claude sessions for free-text CEO messages |
+| `bot/watcher.py` | Scans escalation directories across projects |
+| `bot/handlers.py` | Telegram message/callback routing, auth check |
+| `bot/main.py` | Entry point, polling loop, escalation scheduler |
