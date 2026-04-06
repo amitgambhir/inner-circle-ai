@@ -63,9 +63,10 @@ async def test_callback_rejects_unauthorized_user():
 
     cfg = Config(bot_token="x", ceo_chat_id=11111, default_project="test", base_dir="/tmp")
 
-    # Mock Telegram objects
+    # Mock Telegram objects — auth checks from_user.id, not message.chat.id
     query = AsyncMock()
-    query.message.chat.id = 99999  # wrong chat ID
+    query.from_user = MagicMock()
+    query.from_user.id = 99999  # wrong user ID
     query.data = "approve:item_2026-04-06_1"
 
     update = MagicMock()

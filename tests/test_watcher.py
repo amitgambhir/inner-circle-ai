@@ -39,32 +39,5 @@ def test_scan_escalations_multiple_projects(tmp_path):
     assert result[0]["project"] == "proj-a"
 
 
-def test_get_active_projects_parses_projects_md(tmp_path):
-    """Regression: escalation watcher must use PROJECTS.md, not directory scan."""
-    from bot.main import _get_active_projects
 
-    (tmp_path / "PROJECTS.md").write_text(
-        "## Active Projects\n\n"
-        "| Priority | Project | Slug | Status | Lead Agents | Notes |\n"
-        "|----------|---------|------|--------|-------------|-------|\n"
-        "| **P0** | Alpha | `proj-alpha` | Active | All | |\n"
-        "| **P2** | Beta | `proj-beta` | Active | Curie | |\n"
-        "| **Paused** | Gamma | `proj-gamma` | Paused | None | frozen |\n"
-    )
-    # Also create a scratch dir that should NOT appear
-    (tmp_path / "projects" / "scratch-test").mkdir(parents=True)
-
-    result = _get_active_projects(str(tmp_path))
-    assert "proj-alpha" in result
-    assert "proj-beta" in result
-    assert "proj-gamma" not in result  # paused = excluded
-    assert "scratch-test" not in result  # not in PROJECTS.md = excluded
-    assert len(result) == 2
-
-
-def test_get_active_projects_missing_file(tmp_path):
-    """Returns empty list if PROJECTS.md doesn't exist."""
-    from bot.main import _get_active_projects
-
-    result = _get_active_projects(str(tmp_path))
-    assert result == []
+# PROJECTS.md parser tests moved to tests/test_projects.py

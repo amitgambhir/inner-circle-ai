@@ -153,7 +153,7 @@ async def handle_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
     query = update.callback_query
     cfg = context.bot_data["config"]
 
-    if query.message.chat.id != cfg.ceo_chat_id:
+    if not query.from_user or query.from_user.id != cfg.ceo_chat_id:
         await query.answer("Unauthorized.")
         return
 

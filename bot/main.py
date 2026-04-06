@@ -13,6 +13,7 @@ from telegram.ext import (
 
 from bot.config import load_config, project_paths
 from bot.handlers import handle_message, handle_callback
+from bot.projects import get_active_projects
 from bot.watcher import scan_escalations
 
 logging.basicConfig(
@@ -22,31 +23,16 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
-def _get_active_projects(base_dir: str) -> list:
-    """Parse PROJECTS.md for active (non-paused) project slugs."""
-    import re
-    projects_md = Path(base_dir) / "PROJECTS.md"
-    if not projects_md.exists():
-        return []
-
-    content = projects_md.read_text()
-    slugs = []
-    for line in content.splitlines():
-        # Match table rows: | Priority | Name | `slug` | Status | ...
-        match = re.match(r"\|[^|]+\|[^|]+\|\s*`([^`]+)`\s*\|\s*(\w+)", line)
-        if match:
-            slug, status = match.group(1), match.group(2)
-            if status.lower() != "paused":
-                slugs.append(slug)
-    return slugs
-
-
 async def check_escalations(context):
     cfg = context.bot_data["config"]
-    projects = _get_active_projects(cfg.base_dir)
+    projects = get_active_projects(cfg.base_dir)
+    seen = context.bot_data.setdefault("seen_escalations", set())
 
     escalations = scan_escalations(cfg.base_dir, projects)
     for esc in escalations:
+        if esc["file"] in seen:
+            continue
+        seen.add(esc["file"])
         await context.bot.send_message(
             chat_id=cfg.ceo_chat_id,
             text=(
