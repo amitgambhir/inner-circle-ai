@@ -27,6 +27,10 @@ temp/
 # Python
 __pycache__/
 *.pyc
+.pytest_cache/
+
+# Claude Code
+.claude/
 
 # Bot runtime state
 .escalations-seen

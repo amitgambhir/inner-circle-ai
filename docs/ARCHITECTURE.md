@@ -215,6 +215,7 @@ inner-circle-ai/
 ├── README.md                         # Framework overview, getting started, use cases
 ├── AGENTS.md                         # Shared operating rules for all agents
 ├── CEO.md                            # CEO preferences, standing permissions, voice profile
+├── CLAUDE.md                         # Project rules for Claude Code sessions
 ├── PROJECTS.md                       # Project registry & priority dashboard
 ├── HEARTBEAT.md                      # Self-healing cron monitor
 │
@@ -286,12 +287,31 @@ inner-circle-ai/
 │       │   └── community/
 │       └── CHANGELOG.md
 │
-└── docs/
-    ├── ARCHITECTURE.md               # This file
-    ├── GETTING-STARTED.md
-    ├── USE-CASES.md                  # 4 use case templates
-    ├── GOVERNANCE.md                 # Deep dive on the approval queue
-    └── CUSTOMIZATION.md              # How to fork and make it yours
+├── bot/                              # Telegram bot — Ada's chat interface
+│   ├── main.py                       # Entry point, polling loop
+│   ├── config.py                     # Agent defs, per-agent tool permissions
+│   ├── runner.py                     # Spawns claude -p per agent
+│   ├── briefing.py                   # Parses Ada's briefing markdown
+│   ├── router.py                     # Writes approval/feedback files
+│   ├── ada.py                        # Free-text → Ada Claude session
+│   ├── projects.py                   # Parses PROJECTS.md for active slugs
+│   ├── handlers.py                   # Telegram message/callback routing
+│   └── watcher.py                    # Escalation directory scanner
+│
+├── tests/                            # pytest test suite (47 tests)
+│
+├── docs/
+│   ├── ARCHITECTURE.md               # This file
+│   ├── GETTING-STARTED.md
+│   ├── USE-CASES.md                  # 4 use case templates
+│   ├── GOVERNANCE.md                 # Deep dive on the approval queue
+│   ├── CUSTOMIZATION.md              # How to fork and make it yours
+│   └── superpowers/
+│       ├── specs/                    # Design specs
+│       └── plans/                    # Implementation plans
+│
+├── requirements.txt                  # Python dependencies
+└── .env.example                      # Bot config template
 ```
 
 ---
@@ -603,8 +623,18 @@ If your tool can read a file and follow instructions, it can run these agents.
 | Nightingale SOUL.md | `/agents/nightingale/SOUL.md` | Head of Operations identity & instructions |
 | Template PROJECT.md | `/projects/_template/PROJECT.md` | Blank template for new projects |
 | Starter PROJECT.md | `/projects/inner-circle-mgmt/PROJECT.md` | Self-referential starter use case |
+| CLAUDE.md | `/CLAUDE.md` | Project rules for Claude Code sessions |
 | Bot entry point | `/bot/main.py` | Telegram bot — Ada's chat interface |
+| Bot config | `/bot/config.py` | Agent definitions, per-agent tool permissions |
+| Bot runner | `/bot/runner.py` | Spawns `claude -p` sessions per agent |
+| Bot briefing parser | `/bot/briefing.py` | Parses Ada's briefing markdown |
+| Bot file router | `/bot/router.py` | Writes approval/feedback/rejection files |
+| Bot Ada handler | `/bot/ada.py` | Free-text CEO messages → Ada Claude session |
+| Bot projects parser | `/bot/projects.py` | Parses PROJECTS.md for active slugs |
+| Bot escalation watcher | `/bot/watcher.py` | Scans escalation directories |
+| Bot handlers | `/bot/handlers.py` | Telegram message/callback routing |
 | Bot design spec | `/docs/superpowers/specs/2026-04-06-ada-telegram-bot-design.md` | Full design spec for the bot |
+| Bot impl plan | `/docs/superpowers/plans/2026-04-06-ada-telegram-bot.md` | Implementation plan |
 
 ---
 
