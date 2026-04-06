@@ -32,5 +32,8 @@ __pycache__/
 # Claude Code
 .claude/
 
+# Superpowers working docs (specs and plans are committed separately)
+docs/superpowers/
+
 # Bot runtime state
 .escalations-seen
