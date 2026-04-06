@@ -96,7 +96,7 @@ That's it. Under 2 minutes.
 ## The Team
 
 | Agent | Named After | Role | Job |
-|-------|------------|------|-----|
+| ----- | ---------- | ---- | --- |
 | **Ada** | Ada Lovelace | Chief of Staff | Coordinate the team, brief the CEO, route all decisions |
 | **Curie** | Marie Curie | Head of Research | Gather intelligence, analyze signals, deliver structured briefs |
 | **Tesla** | Nikola Tesla | Head of Engineering | Triage issues, review PRs, write specs, technical decisions |
@@ -108,7 +108,7 @@ That's it. Under 2 minutes.
 ## Built On
 
 | Component | Why |
-|-----------|-----|
+| --------- | --- |
 | **Markdown files** | Every AI tool reads them natively — zero vendor lock-in |
 | **Git** | State management, version control, and collaboration built in |
 | **SOUL.md** | One file per agent defines identity, principles, workflow, and stop condition |
@@ -179,6 +179,8 @@ File flow:
   All agents            → write to outbox/ → Ada consolidates → CEO decides
 ```
 
+For the full architecture — dependency graphs, file flow diagrams, agent identity summaries, memory system, and the Telegram bot internals — see [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
+
 ---
 
 ## The Governance Model
@@ -203,7 +205,7 @@ See [docs/GOVERNANCE.md](docs/GOVERNANCE.md) for the full model.
 The framework ships with **open source repo management** as the starter (this repo manages itself). Four additional templates are included in [docs/USE-CASES.md](docs/USE-CASES.md):
 
 | Use Case | Primary Agents | Cadence |
-|----------|---------------|---------|
+| -------- | ------------- | ------- |
 | **Content engine for a SaaS blog** | Curie + Ogilvy | Daily |
 | **Launch week playbook** | All five, full throttle | Sprint (bounded) |
 | **Weekly competitor intelligence** | Curie + Ada | Weekly |
