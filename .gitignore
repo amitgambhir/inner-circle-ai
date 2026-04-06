@@ -1,0 +1,25 @@
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Environment
+.env
+.env.local
+
+# API keys — never commit these
+*.key
+*.secret
+
+# Logs
+*.log
+
+# Temporary files
+tmp/
+temp/
