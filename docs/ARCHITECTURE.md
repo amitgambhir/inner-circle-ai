@@ -703,7 +703,7 @@ Each agent gets only the tools it needs via `claude -p --allowedTools`. This is 
 - **Long-polling, no webhook.** Runs locally on the CEO's machine. No server infrastructure needed.
 - **File layer stays identical.** The bot is a convenience wrapper. Remove the bot and the framework still works via manual sessions in any AI tool.
 
-### 14.5 Phase 2 (Planned)
+### 14.5 Phase 2 (TBD)
 
 - Cron-based scheduling — agents run on a schedule, bot sends briefings automatically
 - Cloud deployment — always-on via Railway, Fly.io, or similar
