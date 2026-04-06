@@ -27,3 +27,6 @@ temp/
 # Python
 __pycache__/
 *.pyc
+
+# Bot runtime state
+.escalations-seen

@@ -23,16 +23,34 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
+def _seen_escalations_path(base_dir: str) -> Path:
+    return Path(base_dir) / ".escalations-seen"
+
+
+def _load_seen_escalations(base_dir: str) -> set:
+    path = _seen_escalations_path(base_dir)
+    if path.exists():
+        return set(path.read_text().splitlines())
+    return set()
+
+
+def _save_seen_escalation(base_dir: str, file_path: str):
+    path = _seen_escalations_path(base_dir)
+    with open(path, "a") as f:
+        f.write(file_path + "\n")
+
+
 async def check_escalations(context):
     cfg = context.bot_data["config"]
     projects = get_active_projects(cfg.base_dir)
-    seen = context.bot_data.setdefault("seen_escalations", set())
+    seen = context.bot_data.setdefault("seen_escalations", _load_seen_escalations(cfg.base_dir))
 
     escalations = scan_escalations(cfg.base_dir, projects)
     for esc in escalations:
         if esc["file"] in seen:
             continue
         seen.add(esc["file"])
+        _save_seen_escalation(cfg.base_dir, esc["file"])
         await context.bot.send_message(
             chat_id=cfg.ceo_chat_id,
             text=(
