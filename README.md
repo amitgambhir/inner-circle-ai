@@ -157,14 +157,14 @@ ls agents/curie/memory/                            # her session log
                                         │
                                         ▼
                          ┌──────────────────────────────┐
-                         │     Ada (Chief of Staff)      │
-                         │  Consolidates → Briefs CEO    │
-                         │  Routes decisions → Agents    │
+                         │     Ada (Chief of Staff)     │
+                         │  Consolidates → Briefs CEO   │
+                         │  Routes decisions → Agents   │
                          └──┬───────┬───────┬───────┬───┘
                             │       │       │       │
-                   ┌────────┘   ┌───┘   ┌───┘   ┌───┘
-                   ▼            ▼       ▼       ▼
-              ┌─────────┐ ┌────────┐ ┌───────┐ ┌─────────────┐
+                   ┌────────┘   ┌───┘    ┌──┘      ┌┘
+                   ▼            ▼        ▼         ▼
+              ┌─────────-┐ ┌────────┐ ┌───────┐ ┌─────────────┐
               │  Curie   │ │ Tesla  │ │Ogilvy │ │ Nightingale │
               │ Research │ │ Engin. │ │Growth │ │ Operations  │
               └────┬─────┘ └───┬────┘ └───┬───┘ └──────┬──────┘
@@ -287,6 +287,65 @@ If your tool can read a file and follow instructions, it can run these agents.
 - **No code, no infrastructure.** Pure markdown files in a git repo. The only code is the optional Telegram bot — and that's just a convenience wrapper around the file layer.
 - **You stay in control.** Every other multi-agent framework optimizes for autonomy. This one optimizes for CEO oversight with a 2-minute daily review.
 - **Tool-agnostic.** Switch from Claude Code to Cursor to Aider — the agents don't care. SOUL.md works everywhere.
+
+---
+
+## Extensibility
+
+The framework is designed to be forked and adapted, not used as-is. Every layer is a seam you can extend.
+
+**Add agents.** Copy any agent directory, write a new SOUL.md, add a row to AGENTS.md. The hub-and-spoke model through Ada means new agents plug in without rewiring anything — they just write to their outbox and Ada picks it up.
+
+**Add projects.** Copy `projects/_template/`, fill in PROJECT.md. Each project is fully isolated with its own intel, outbox, and escalation directories. Agents work across multiple projects by checking PROJECTS.md for priorities.
+
+**Add use cases.** The five agent roles (research, engineering, growth, operations, coordination) map to most business functions. Swap the domain context in SOUL.md files and the agent behavior follows — the LLM already understands roles like "Head of Research" from training data. See [docs/USE-CASES.md](docs/USE-CASES.md) for four ready-made templates.
+
+**Swap the communication layer.** The Telegram bot is one interface. The file layer underneath is the real system. Build a Slack bot, a Discord bot, a web dashboard, or a CLI wrapper — anything that reads `outbox/ada/` and writes approval files works.
+
+**Swap the AI tool.** SOUL.md files are plain markdown. Any tool that reads files and follows instructions can run these agents. Move from Claude Code to Cursor mid-project and nothing breaks.
+
+**Customize governance.** Start with the approval queue as-is, then loosen it. Grant standing permissions in CEO.md for trusted actions. Adjust escalation thresholds. The governance model is a dial, not a switch.
+
+---
+
+## Contributing
+
+Contributions are welcome. This is an MIT-licensed open-source project.
+
+**Good first contributions:**
+
+- New use case templates in `docs/USE-CASES.md`
+- Improvements to SOUL.md files (better prompts, clearer stop conditions)
+- Bug fixes in the Telegram bot (`bot/`)
+- Documentation improvements
+
+**How to contribute:**
+
+1. Fork the repo
+2. Create a branch (`git checkout -b feature/your-idea`)
+3. Make your changes
+4. Run tests (`python3 -m pytest tests/ -v`)
+5. Submit a PR with a clear description of what changed and why
+
+**Guidelines:**
+
+- Keep SOUL.md files under 60 lines of core instructions. Complexity goes in PROJECT.md or `intel/`, not in the agent identity.
+- One writer per file. If your change introduces a new file, make clear which agent owns it.
+- The approval queue is the governance backbone. Changes that bypass or weaken it need strong justification.
+- Test your changes. The bot has 47 tests — don't break them, and add tests for new behavior.
+
+**What we're looking for:**
+
+- Real-world use case reports — what worked, what didn't, what you changed
+- Agent prompt improvements backed by actual session output
+- Integration with other AI tools (Cursor rules, Windsurf rules, Aider configs)
+- Alternative communication layers (Slack, Discord, web UI)
+
+---
+
+## License
+
+MIT — use it however you want.
 
 ---
 
