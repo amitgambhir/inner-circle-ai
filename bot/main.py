@@ -23,14 +23,22 @@ logger = logging.getLogger(__name__)
 
 
 def _get_active_projects(base_dir: str) -> list:
-    """Scan projects/ directory for all project slugs (excluding _template)."""
-    projects_dir = Path(base_dir) / "projects"
-    if not projects_dir.exists():
+    """Parse PROJECTS.md for active (non-paused) project slugs."""
+    import re
+    projects_md = Path(base_dir) / "PROJECTS.md"
+    if not projects_md.exists():
         return []
-    return [
-        d.name for d in projects_dir.iterdir()
-        if d.is_dir() and d.name != "_template"
-    ]
+
+    content = projects_md.read_text()
+    slugs = []
+    for line in content.splitlines():
+        # Match table rows: | Priority | Name | `slug` | Status | ...
+        match = re.match(r"\|[^|]+\|[^|]+\|\s*`([^`]+)`\s*\|\s*(\w+)", line)
+        if match:
+            slug, status = match.group(1), match.group(2)
+            if status.lower() != "paused":
+                slugs.append(slug)
+    return slugs
 
 
 async def check_escalations(context):

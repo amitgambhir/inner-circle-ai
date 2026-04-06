@@ -1,6 +1,7 @@
 import pytest
 from pathlib import Path
-from bot.handlers import parse_run_command, is_run_command
+from unittest.mock import AsyncMock, MagicMock, patch
+from bot.handlers import parse_run_command, is_run_command, handle_callback
 
 
 def test_is_run_command():
@@ -53,3 +54,29 @@ def test_briefing_filename_matches_documented_convention(tmp_path):
     # The old wrong filename should NOT exist
     wrong_path = outbox / f"{today}-briefing.md"
     assert not wrong_path.exists()
+
+
+@pytest.mark.asyncio
+async def test_callback_rejects_unauthorized_user():
+    """Regression: callback buttons must check chat_id, not just messages."""
+    from bot.config import Config
+
+    cfg = Config(bot_token="x", ceo_chat_id=11111, default_project="test", base_dir="/tmp")
+
+    # Mock Telegram objects
+    query = AsyncMock()
+    query.message.chat.id = 99999  # wrong chat ID
+    query.data = "approve:item_2026-04-06_1"
+
+    update = MagicMock()
+    update.callback_query = query
+
+    context = MagicMock()
+    context.bot_data = {"config": cfg, "briefing_items": {}}
+
+    await handle_callback(update, context)
+
+    # Should answer with "Unauthorized." and NOT proceed to write files
+    query.answer.assert_called_once_with("Unauthorized.")
+    # edit_message_text should NOT have been called (no approval/rejection written)
+    query.edit_message_text.assert_not_called()

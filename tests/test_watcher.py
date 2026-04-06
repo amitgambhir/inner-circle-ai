@@ -39,19 +39,32 @@ def test_scan_escalations_multiple_projects(tmp_path):
     assert result[0]["project"] == "proj-a"
 
 
-def test_get_active_projects_scans_all_except_template(tmp_path):
-    """Regression: escalation watcher must check ALL active projects, not just the default."""
+def test_get_active_projects_parses_projects_md(tmp_path):
+    """Regression: escalation watcher must use PROJECTS.md, not directory scan."""
     from bot.main import _get_active_projects
 
-    projects = tmp_path / "projects"
-    (projects / "_template").mkdir(parents=True)
-    (projects / "proj-alpha").mkdir(parents=True)
-    (projects / "proj-beta").mkdir(parents=True)
-    (projects / "inner-circle-mgmt").mkdir(parents=True)
+    (tmp_path / "PROJECTS.md").write_text(
+        "## Active Projects\n\n"
+        "| Priority | Project | Slug | Status | Lead Agents | Notes |\n"
+        "|----------|---------|------|--------|-------------|-------|\n"
+        "| **P0** | Alpha | `proj-alpha` | Active | All | |\n"
+        "| **P2** | Beta | `proj-beta` | Active | Curie | |\n"
+        "| **Paused** | Gamma | `proj-gamma` | Paused | None | frozen |\n"
+    )
+    # Also create a scratch dir that should NOT appear
+    (tmp_path / "projects" / "scratch-test").mkdir(parents=True)
 
     result = _get_active_projects(str(tmp_path))
-    assert "_template" not in result
     assert "proj-alpha" in result
     assert "proj-beta" in result
-    assert "inner-circle-mgmt" in result
-    assert len(result) == 3
+    assert "proj-gamma" not in result  # paused = excluded
+    assert "scratch-test" not in result  # not in PROJECTS.md = excluded
+    assert len(result) == 2
+
+
+def test_get_active_projects_missing_file(tmp_path):
+    """Returns empty list if PROJECTS.md doesn't exist."""
+    from bot.main import _get_active_projects
+
+    result = _get_active_projects(str(tmp_path))
+    assert result == []
