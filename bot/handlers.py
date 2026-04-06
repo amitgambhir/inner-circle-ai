@@ -35,7 +35,9 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
     cfg = context.bot_data["config"]
     chat_id = update.effective_chat.id
 
+    logger.info(f"Message from chat_id={chat_id}, expected={cfg.ceo_chat_id}")
     if chat_id != cfg.ceo_chat_id:
+        logger.warning(f"Rejected message from unauthorized chat_id={chat_id}")
         return
 
     text = update.message.text.strip()
@@ -102,7 +104,7 @@ async def _send_briefing(
 ) -> None:
     today = date.today().isoformat()
     briefing_path = (
-        Path(cfg.base_dir) / "projects" / project / "outbox" / "ada" / f"{today}-briefing.md"
+        Path(cfg.base_dir) / "projects" / project / "outbox" / "ada" / f"ceo-briefing-{today}.md"
     )
 
     if not briefing_path.exists():
@@ -149,12 +151,16 @@ async def _send_briefing(
 
 async def handle_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     query = update.callback_query
+    cfg = context.bot_data["config"]
+
+    if query.message.chat.id != cfg.ceo_chat_id:
+        await query.answer("Unauthorized.")
+        return
+
     await query.answer()
 
     data = query.data
     action, item_key = data.split(":", 1)
-
-    cfg = context.bot_data["config"]
     items = context.bot_data.get("briefing_items", {})
     item = items.get(item_key)
 

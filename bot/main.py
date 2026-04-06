@@ -2,6 +2,7 @@ import asyncio
 import logging
 import shutil
 import sys
+from pathlib import Path
 
 from telegram.ext import (
     ApplicationBuilder,
@@ -21,9 +22,20 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
+def _get_active_projects(base_dir: str) -> list:
+    """Scan projects/ directory for all project slugs (excluding _template)."""
+    projects_dir = Path(base_dir) / "projects"
+    if not projects_dir.exists():
+        return []
+    return [
+        d.name for d in projects_dir.iterdir()
+        if d.is_dir() and d.name != "_template"
+    ]
+
+
 async def check_escalations(context):
     cfg = context.bot_data["config"]
-    projects = [cfg.default_project]
+    projects = _get_active_projects(cfg.base_dir)
 
     escalations = scan_escalations(cfg.base_dir, projects)
     for esc in escalations:
