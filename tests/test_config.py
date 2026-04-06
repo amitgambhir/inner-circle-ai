@@ -33,28 +33,29 @@ def test_load_config_defaults():
         assert cfg.default_project == "inner-circle-mgmt"
 
 
-def test_load_config_missing_token():
-    env = {"TELEGRAM_CEO_CHAT_ID": "99999"}
-    with patch.dict(os.environ, env, clear=True):
-        os.environ.pop("TELEGRAM_BOT_TOKEN", None)
-        from importlib import reload
-        import bot.config
+def test_load_config_missing_token(monkeypatch):
+    monkeypatch.delenv("TELEGRAM_BOT_TOKEN", raising=False)
+    monkeypatch.setenv("TELEGRAM_CEO_CHAT_ID", "99999")
+    # Prevent load_dotenv from re-loading .env during reload
+    monkeypatch.setattr("dotenv.load_dotenv", lambda *a, **kw: None)
+    from importlib import reload
+    import bot.config
 
-        reload(bot.config)
-        with pytest.raises(ValueError, match="TELEGRAM_BOT_TOKEN"):
-            bot.config.load_config()
+    reload(bot.config)
+    with pytest.raises(ValueError, match="TELEGRAM_BOT_TOKEN"):
+        bot.config.load_config()
 
 
-def test_load_config_missing_chat_id():
-    env = {"TELEGRAM_BOT_TOKEN": "test-token"}
-    with patch.dict(os.environ, env, clear=True):
-        os.environ.pop("TELEGRAM_CEO_CHAT_ID", None)
-        from importlib import reload
-        import bot.config
+def test_load_config_missing_chat_id(monkeypatch):
+    monkeypatch.setenv("TELEGRAM_BOT_TOKEN", "test-token")
+    monkeypatch.delenv("TELEGRAM_CEO_CHAT_ID", raising=False)
+    monkeypatch.setattr("dotenv.load_dotenv", lambda *a, **kw: None)
+    from importlib import reload
+    import bot.config
 
-        reload(bot.config)
-        with pytest.raises(ValueError, match="TELEGRAM_CEO_CHAT_ID"):
-            bot.config.load_config()
+    reload(bot.config)
+    with pytest.raises(ValueError, match="TELEGRAM_CEO_CHAT_ID"):
+        bot.config.load_config()
 
 
 def test_agent_definitions():
@@ -64,6 +65,10 @@ def test_agent_definitions():
     assert AGENT_ORDER == ["curie", "tesla", "ogilvy", "nightingale", "ada"]
     assert AGENTS["ada"]["title"] == "Ada, Chief of Staff"
     assert AGENTS["curie"]["title"] == "Curie, Head of Research"
+    # Each agent has per-role tools
+    assert "WebSearch" in AGENTS["curie"]["tools"]
+    assert "WebSearch" not in AGENTS["tesla"]["tools"]
+    assert "Bash(gh issue:*)" in AGENTS["tesla"]["tools"]
 
 
 def test_project_paths(tmp_path):

@@ -8,12 +8,34 @@ load_dotenv()
 
 AGENT_ORDER = ["curie", "tesla", "ogilvy", "nightingale", "ada"]
 
+# Base tools every agent gets
+_BASE_TOOLS = ["Read", "Write", "Edit", "Glob", "Grep", "Bash(ls:*)"]
+_GIT_READ = ["Bash(git log:*)", "Bash(git diff:*)", "Bash(git status:*)", "Bash(git show:*)"]
+_GIT_WRITE = _GIT_READ + ["Bash(git add:*)", "Bash(git commit:*)"]
+_GH_CLI = ["Bash(gh issue:*)", "Bash(gh pr:*)", "Bash(gh api:*)"]
+_WEB = ["WebSearch", "WebFetch"]
+
 AGENTS = {
-    "curie": {"title": "Curie, Head of Research"},
-    "tesla": {"title": "Tesla, Head of Engineering"},
-    "ogilvy": {"title": "Ogilvy, Head of Growth"},
-    "nightingale": {"title": "Nightingale, Head of Operations"},
-    "ada": {"title": "Ada, Chief of Staff"},
+    "curie": {
+        "title": "Curie, Head of Research",
+        "tools": _BASE_TOOLS + _GIT_READ + _GH_CLI + _WEB,
+    },
+    "tesla": {
+        "title": "Tesla, Head of Engineering",
+        "tools": _BASE_TOOLS + _GIT_WRITE + _GH_CLI,
+    },
+    "ogilvy": {
+        "title": "Ogilvy, Head of Growth",
+        "tools": _BASE_TOOLS + _GIT_READ + _WEB,
+    },
+    "nightingale": {
+        "title": "Nightingale, Head of Operations",
+        "tools": _BASE_TOOLS + _GIT_READ + _WEB,
+    },
+    "ada": {
+        "title": "Ada, Chief of Staff",
+        "tools": _BASE_TOOLS + _GIT_WRITE,
+    },
 }
 
 

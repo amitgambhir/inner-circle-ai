@@ -26,7 +26,9 @@ async def ask_ada(message: str, project: str, base_dir: str) -> str:
 
     try:
         proc = await asyncio.create_subprocess_exec(
-            "claude", "-p", prompt, "--output-format", "text",
+            "claude", "-p", prompt,
+            "--output-format", "text",
+            "--allowedTools", "Read", "Write", "Edit", "Glob", "Grep", "Bash(git log:*)", "Bash(git diff:*)", "Bash(git status:*)", "Bash(ls:*)",
             cwd=base_dir,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,

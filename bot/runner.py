@@ -57,8 +57,13 @@ async def run_agents(
             await on_status(f"Running {title}...")
 
         try:
+            tools = AGENTS[agent].get("tools", [])
+            cmd = ["claude", "-p", prompt, "--output-format", "text"]
+            if tools:
+                cmd += ["--allowedTools"] + tools
+
             proc = await asyncio.create_subprocess_exec(
-                "claude", "-p", prompt, "--output-format", "text",
+                *cmd,
                 cwd=base_dir,
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE,
