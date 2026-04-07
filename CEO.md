@@ -19,6 +19,9 @@ This file defines the CEO's operating preferences, standing permissions, and voi
 - When something is blocked on me, say so explicitly. Don't hint.
 - If you need a decision, frame it as: "I recommend X because Y. Approve or redirect?"
 
+### Code Quality
+- Any code change that introduces a new dependency must update requirements.txt (or the equivalent manifest) in the same commit. Don't assume local installs are captured. If it won't work in a clean environment, it's not done.
+
 ### Feedback Style
 - When I give feedback, I mean it literally. Don't interpret or soften.
 - If I say "too formal," make it casual. Don't make it slightly less formal.
