@@ -75,13 +75,13 @@ Bottom line: 4 new issues, 2 bugs (P1), 1 feature request (P2), 1 question.
 Ada's recommendation: Approve triage. Assign bugs to Tesla for next session.
 File: outbox/tesla/triage-2026-04-06.md
 
-### 3. Competitor Brief — from Curie
+### 3. Ecosystem Brief — from Curie
 Bottom line: CrewAI shipped v0.5 with memory support. Relevant to our positioning.
 Ada's recommendation: Approve brief. Flag for Ogilvy to draft a comparison post.
-File: outbox/curie/competitor-update-2026-04-06.md
+File: outbox/curie/ecosystem-update-2026-04-06.md
 
 ## Status Update
-- Curie: Delivered daily intel brief. Tracking 6 competitor frameworks.
+- Curie: Delivered daily intel brief. Tracking 6 ecosystem frameworks.
 - Tesla: Reviewed 2 PRs, triaged 4 issues.
 - Ogilvy: Drafted release notes for v0.2.0.
 - Nightingale: Updated GETTING-STARTED.md with new session workflow.
@@ -208,7 +208,7 @@ The framework ships with **open source repo management** as the starter (this re
 | -------- | ------------- | ------- |
 | **Content engine for a SaaS blog** | Curie + Ogilvy | Daily |
 | **Launch week playbook** | All five, full throttle | Sprint (bounded) |
-| **Weekly competitor intelligence** | Curie + Ada | Weekly |
+| **Weekly ecosystem intelligence** | Curie + Ada | Weekly |
 | **Customer feedback → product pipeline** | Nightingale + Curie + Tesla | Weekly |
 
 To start your own: copy `projects/_template/`, fill in `PROJECT.md`, set priority in `PROJECTS.md`.

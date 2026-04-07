@@ -319,7 +319,7 @@ inner-circle-ai/
 ```
 CURIE (Research) — runs first
 ├── Scans: GitHub issues, PRs, discussions, stars/forks trends,
-│          community sentiment, competitor repos
+│          community sentiment, ecosystem framework repos
 ├── Writes: projects/inner-circle-mgmt/intel/research/YYYY-MM-DD-brief.md
 └── Writes: projects/inner-circle-mgmt/intel/research/signal-tracker.json
                 ↓
@@ -402,7 +402,7 @@ CEO (You) — talks ONLY to Ada (unless using direct access)
 **Core Identity:** Evidence-obsessed, thorough, allergic to speculation. Named after Marie Curie — she didn't guess, she measured.
 
 **Key Responsibilities:**
-- Gather signals: GitHub issues/PRs/discussions, community sentiment, competitor activity, ecosystem trends
+- Gather signals: GitHub issues/PRs/discussions, community sentiment, ecosystem framework activity, trends
 - Deliver structured intel briefs that every other agent consumes
 - Track signals over time — what's trending up, what's fading
 
@@ -415,7 +415,7 @@ CEO (You) — talks ONLY to Ada (unless using direct access)
 **Stop Condition:** When the intel brief is written with sources and delivered to the intel directory.
 
 **Writes to:** `intel/research/` (briefs, signal tracker — no approval needed)
-**Reads from:** External sources (GitHub, community channels, competitor repos)
+**Reads from:** External sources (GitHub, community channels, ecosystem framework repos)
 
 ### 6.3 Tesla (Head of Engineering)
 
@@ -492,8 +492,8 @@ Curie researches trending topics. Ogilvy drafts posts and social content. Nighti
 ### 7.2 Launch Week Playbook
 All five agents at full throttle for a bounded sprint. Dedicated project directory, P0 priority, hard deadline. Tesla writes changelog, Ogilvy writes announcements, Curie researches positioning, Nightingale prepares support docs, Ada runs the launch checklist.
 
-### 7.3 Weekly Competitor Intelligence Briefing
-Curie monitors competitors on a strict weekly cadence. Ogilvy suggests response content. Tesla flags technical implications. Ada delivers a consolidated Monday briefing.
+### 7.3 Weekly Ecosystem Intelligence Briefing
+Curie monitors peer frameworks on a strict weekly cadence. Ogilvy suggests positioning content. Tesla flags technical implications. Ada delivers a consolidated Monday briefing.
 
 ### 7.4 Customer Feedback → Product Pipeline
 Nightingale aggregates feedback from support channels. Curie analyzes patterns. Tesla writes specs for top requests. Ada presents a prioritized roadmap. The intel flow reverses — operations feeds research feeds engineering.

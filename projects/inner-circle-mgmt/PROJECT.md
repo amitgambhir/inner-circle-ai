@@ -18,7 +18,7 @@ This is the starter use case: the inner-circle-ai agent team managing its own re
 - Writing release notes for new versions
 - Maintaining all documentation (README, guides, SOUL files)
 - Tracking repo health metrics (stars, forks, contributors, issue velocity)
-- Scanning the AI agent ecosystem for trends and competitor activity
+- Scanning the AI agent ecosystem for trends and relevant framework activity
 - Creating social media content for milestones and releases
 
 ### What's Out of Scope
@@ -32,7 +32,7 @@ This is the starter use case: the inner-circle-ai agent team managing its own re
 
 | Agent | Focus Area |
 |-------|-----------|
-| **Curie** | Research ecosystem trends, monitor repo activity, track competitor frameworks |
+| **Curie** | Research ecosystem trends, monitor repo activity, track peer frameworks |
 | **Tesla** | Triage issues, review PRs, write ADRs, maintain technical integrity |
 | **Ogilvy** | Release notes, community updates, social posts for milestones |
 | **Nightingale** | Documentation quality, repo health metrics, contributor experience |
@@ -51,7 +51,7 @@ This is the starter use case: the inner-circle-ai agent team managing its own re
 
 ---
 
-## Competitor Landscape (Curie Monitors These)
+## Ecosystem Landscape (Curie Monitors These)
 
 - CrewAI — role-playing agent orchestration
 - MetaGPT — multi-agent meta programming
