@@ -306,10 +306,6 @@ inner-circle-ai/
 │   ├── USE-CASES.md                  # 4 use case templates
 │   ├── GOVERNANCE.md                 # Deep dive on the approval queue
 │   ├── CUSTOMIZATION.md              # How to fork and make it yours
-│   └── superpowers/
-│       ├── specs/                    # Design specs
-│       └── plans/                    # Implementation plans
-│
 ├── requirements.txt                  # Python dependencies
 └── .env.example                      # Bot config template
 ```
@@ -633,8 +629,6 @@ If your tool can read a file and follow instructions, it can run these agents.
 | Bot projects parser | `/bot/projects.py` | Parses PROJECTS.md for active slugs |
 | Bot escalation watcher | `/bot/watcher.py` | Scans escalation directories |
 | Bot handlers | `/bot/handlers.py` | Telegram message/callback routing |
-| Bot design spec | `/docs/superpowers/specs/2026-04-06-ada-telegram-bot-design.md` | Full design spec for the bot |
-| Bot impl plan | `/docs/superpowers/plans/2026-04-06-ada-telegram-bot.md` | Implementation plan |
 
 ---
 

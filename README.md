@@ -264,8 +264,6 @@ cp .env.example .env
 python3 -m bot.main
 ```
 
-See [docs/superpowers/specs/2026-04-06-ada-telegram-bot-design.md](docs/superpowers/specs/2026-04-06-ada-telegram-bot-design.md) for the full design spec.
-
 ---
 
 ## Compatible AI Tools
