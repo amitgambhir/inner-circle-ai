@@ -37,3 +37,20 @@ docs/superpowers/
 
 # Bot runtime state
 .escalations-seen
+
+# Agent runtime output — never commit these
+agents/*/memory/*.md
+!agents/*/memory/.gitkeep
+projects/*/intel/**/*.md
+projects/*/intel/**/*.json
+!projects/*/intel/**/.gitkeep
+projects/*/outbox/**/*.md
+!projects/*/outbox/**/.gitkeep
+projects/*/approved/*.md
+!projects/*/approved/.gitkeep
+projects/*/feedback/*.md
+!projects/*/feedback/.gitkeep
+projects/*/escalations/*.md
+!projects/*/escalations/.gitkeep
+projects/*/content/**/*.md
+!projects/*/content/**/.gitkeep
