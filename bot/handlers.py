@@ -16,19 +16,30 @@ from bot.runner import resolve_run_order, run_agents
 logger = logging.getLogger(__name__)
 
 
+def _extract_run_command(text: str) -> str:
+    """Extract the 'run ...' portion from a message, or return empty string."""
+    import re
+    match = re.search(r'\brun\s+(the\s+team|(?:curie|tesla|ogilvy|nightingale|ada)(?:\s+(?:curie|tesla|ogilvy|nightingale|ada))*)', text.lower())
+    return match.group(0) if match else ""
+
+
 def is_run_command(text: str) -> bool:
-    return text.strip().lower().startswith("run ")
+    return bool(_extract_run_command(text))
 
 
 def parse_run_command(text: str) -> List[str]:
-    parts = text.strip().lower().split()
+    cmd = _extract_run_command(text)
+    if not cmd:
+        return ["all"]
+
+    parts = cmd.split()
     # parts[0] is "run"
     rest = parts[1:]
 
-    if not rest or rest == ["the", "team"] or "team" in rest:
+    if not rest or "team" in rest:
         return ["all"]
 
-    return rest
+    return [p for p in rest if p != "the"]
 
 
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:

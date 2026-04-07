@@ -11,6 +11,10 @@ def test_is_run_command():
     assert is_run_command("run curie tesla ada") is True
     assert is_run_command("what did curie find?") is False
     assert is_run_command("approve item 1") is False
+    # Run command embedded in natural language
+    assert is_run_command("Good morning! Run the team") is True
+    assert is_run_command("hey, run curie please") is True
+    assert is_run_command("can you run tesla") is True
 
 
 def test_parse_run_command_full_team():
