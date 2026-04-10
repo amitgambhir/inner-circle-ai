@@ -261,7 +261,22 @@ Ada:  [reads Curie's intel, responds]
 pip install -r requirements.txt
 cp .env.example .env
 # Edit .env with your Telegram bot token and chat ID
+```
+
+**Running the bot:**
+
+```bash
+# Foreground (stops when you close the terminal)
 python3 -m bot.main
+
+# Background (survives closing the terminal)
+nohup python3 -m bot.main > /tmp/ada-bot.log 2>&1 &
+
+# Stop the bot
+pkill -f "bot.main"
+
+# Check logs
+tail -f /tmp/ada-bot.log
 ```
 
 ---
